@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume Builder Widget</title>
+  <meta name="description" content="Build a professional resume and AI-assisted cover letter in minutes. Free, no signup." />
+  <link rel="stylesheet" href="/widget.css" />
+</head>
+<body>
+  <!-- The original builder UI moved here to keep the main site clean -->
+  <header class="topbar">
+    <h1>AI Resume & Cover Letter Builder</h1>
+    <div class="actions">
+      <button id="btnSave" class="btn">Save</button>
+      <button id="btnLoad" class="btn ghost">Load</button>
+      <button id="btnClear" class="btn danger">Clear</button>
+      <button id="btnPrint" class="btn primary">Export / Print PDF</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card form">
+      <h2>Your Details</h2>
+
+      <div class="grid-2">
+        <label>Full Name
+          <input id="name" placeholder="Reema Abbas" />
+        </label>
+        <label>Title
+          <input id="title" placeholder="Computer Systems Engineer" />
+        </label>
+        <label>Email
+          <input id="email" type="email" placeholder="you@example.com" />
+        </label>
+        <label>Phone
+          <input id="phone" placeholder="+92..." />
+        </label>
+        <label>Location
+          <input id="location" placeholder="Jamshoro, Pakistan" />
+        </label>
+        <label>Website / LinkedIn
+          <input id="website" placeholder="linkedin.com/in/username" />
+        </label>
+      </div>
+
+      <label>Summary
+        <textarea id="summary" rows="3" placeholder="2–3 lines about your skills and impact..."></textarea>
+      </label>
+
+      <div class="hr"></div>
+      <h3>Skills</h3>
+      <small>Add comma-separated (e.g., HTML, CSS, JS, React, Flutter)</small>
+      <input id="skills" placeholder="HTML, CSS, JavaScript, React, Flutter, Firebase" />
+
+      <div class="hr"></div>
+      <h3>Experience</h3>
+      <div id="expList" class="repeater"></div>
+      <button id="addExp" class="btn small">+ Add Experience</button>
+
+      <div class="hr"></div>
+      <h3>Education</h3>
+      <div id="eduList" class="repeater"></div>
+      <button id="addEdu" class="btn small">+ Add Education</button>
+
+      <div class="hr"></div>
+      <h3>Projects</h3>
+      <div id="projList" class="repeater"></div>
+      <button id="addProj" class="btn small">+ Add Project</button>
+
+      <div class="hr"></div>
+      <h3>Template & Theme</h3>
+      <div class="grid-2">
+        <label>Template
+          <select id="tpl">
+            <option value="clean">Clean (ATS-friendly)</option>
+            <option value="bold">Bold Left Rail</option>
+            <option value="modern">Modern Two-Column</option>
+          </select>
+        </label>
+        <label>Accent
+          <input id="accent" type="color" value="#5b7fff" />
+        </label>
+      </div>
+
+      <div class="hr"></div>
+      <h3>AI Cover Letter</h3>
+      <div class="grid-2">
+        <label>Job Title
+          <input id="clRole" placeholder="Frontend Developer" />
+        </label>
+        <label>Company
+          <input id="clCompany" placeholder="Acme Inc." />
+        </label>
+      </div>
+      <label>Job Description (paste keywords)
+        <textarea id="clJD" rows="4" placeholder="Paste key requirements from the job posting…"></textarea>
+      </label>
+
+      <details class="ai-adv">
+        <summary>Use your own AI API key (optional)</summary>
+        <small>
+          Frontend-only site: keep keys safe. This stores in your browser only.
+          Works with OpenAI-compatible APIs.
+        </small>
+        <div class="grid-2">
+          <label>API Base (optional)
+            <input id="apiBase" placeholder="https://api.openai.com/v1" />
+          </label>
+          <label>API Key (optional)
+            <input id="apiKey" placeholder="sk-..." />
+          </label>
+        </div>
+        <label>Model
+          <input id="apiModel" value="gpt-4o-mini" />
+        </label>
+      </details>
+
+      <div class="row">
+        <button id="genCL" class="btn primary">Generate Cover Letter</button>
+        <button id="copyCL" class="btn ghost">Copy Letter</button>
+      </div>
+    </section>
+
+    <section class="card preview">
+      <div class="preview-tabs">
+        <button class="tab active" data-tab="resume">Resume Preview</button>
+        <button class="tab" data-tab="letter">Cover Letter</button>
+      </div>
+
+      <article id="resume" class="paper">
+      </article>
+
+      <article id="letter" class="paper hidden">
+        <div id="clOut" class="letter"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="ad-slot"><!-- Ad placeholder --></div>
+    <p>© <span id="year" data-year></span> AI Resume Builder · Built for learning & freelancing · Hosted on Netlify</p>
+  </footer>
+
+  <template id="expTpl">
+    <div class="item">
+      <div class="grid-2">
+        <label>Role <input placeholder="Frontend Intern"></label>
+        <label>Company <input placeholder="Company name"></label>
+      </div>
+      <div class="grid-2">
+        <label>Start <input placeholder="Jun 2024"></label>
+        <label>End <input placeholder="Present"></label>
+      </div>
+      <label>Achievements (• bullet per line)
+        <textarea rows="3" placeholder="• Built responsive UI
+• Improved performance by 25%"></textarea>
+      </label>
+      <button class="btn tiny danger remove">Remove</button>
+      <div class="rule"></div>
+    </div>
+  </template>
+
+  <template id="eduTpl">
+    <div class="item">
+      <div class="grid-2">
+        <label>Degree <input placeholder="B.E. Computer Systems"></label>
+        <label>Institute <input placeholder="MUET"></label>
+      </div>
+      <div class="grid-2">
+        <label>Start <input placeholder="2023"></label>
+        <label>End <input placeholder="2027"></label>
+      </div>
+      <label>Highlights
+        <textarea rows="2" placeholder="CGPA 3.6, Relevant courses: DSA, OS"></textarea>
+      </label>
+      <button class="btn tiny danger remove">Remove</button>
+      <div class="rule"></div>
+    </div>
+  </template>
+
+  <template id="projTpl">
+    <div class="item">
+      <label>Project Title <input placeholder="Food Delivery App (Flutter + Firebase)"></label>
+      <label>Description
+        <textarea rows="3" placeholder="Authentication, restaurant listings, cart, payments, order tracking."></textarea>
+      </label>
+      <label>Link (GitHub/Live)
+        <input placeholder="https://github.com/username/repo" />
+      </label>
+      <button class="btn tiny danger remove">Remove</button>
+      <div class="rule"></div>
+    </div>
+  </template>
+
+  <script src="/widget.js"></script>
+</body>
+</html>
